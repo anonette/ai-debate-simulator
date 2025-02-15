@@ -27,16 +27,32 @@ OPENROUTER_API_KEY=your_api_key_here
 ## Running the Project
 
 ### Part 1: Debate Simulator
+Choose one of two versions to run:
+
+1. Basic version (local storage):
 ```bash
-# Start the Streamlit debate app
+# Start the basic Streamlit debate app
 streamlit run debate_app.py
 ```
 
-The debate interface will:
+2. Enhanced version (with cloud storage):
+```bash
+# Start the enhanced Streamlit debate app with Google Cloud Storage
+streamlit run app.py
+```
+
+The basic version will:
 - Show a debate between OpenAI and DeepSeek
 - Allow progression with "Next Turn" button
 - Display color-coded messages with avatars
 - Enable debate reset
+
+The enhanced version (app.py) adds:
+- Google Cloud Storage integration for logs and transcripts
+- Advanced UI with custom styling
+- Real-time debate statistics
+- Export functionality for transcripts
+- Rotating log management
 
 ### Part 2: Thinking Models Testing
 
@@ -88,7 +104,13 @@ This project creates an engaging debate simulation where:
 debate3/
 ├── README.md               # Project documentation
 ├── requirements.txt        # Project dependencies
-├── debate_app.py          # Streamlit interface
+├── debate_app.py          # Basic Streamlit interface
+├── app.py                 # Enhanced Streamlit interface with:
+│    - Google Cloud Storage integration
+│    - Advanced logging system
+│    - Styled UI components
+│    - Real-time debate transcripts
+│    - Export functionality
 ├── debate_manager.py      # Debate flow controller
 ├── debate_system.py       # Agent implementation
 ├── debate_conversation.json # Conversation dataset
@@ -182,107 +204,3 @@ Starts with 'sk-or-v1-': True
 
 Success! Response: Hello, testing the connection!
 ```
-
-Required files:
-- `.env`: Contains API credentials
-- `config.yaml`: Contains agent configurations
-
-#### 1. Test Thinking Models (`testthinkingmodels.py`)
-```python
-# Basic testing of AI reasoning using OpenRouter API
-# Features:
-- Tests Aion-1.0 model
-- Streams responses with reasoning
-- Includes system context for consistent responses
-```
-
-#### 2. DeepSeek Thinking Test (`test_deepseek_thinking.py`)
-```python
-# Tests O1's thinking responses through OpenRouter
-# Features:
-- Colored output (blue for reasoning, green for content)
-- Step-by-step reasoning display
-- Structured XML-style thinking tags
-```
-
-#### 3. DeepSeek Testing (`deepseektesting.py`)
-```python
-# Tests DeepSeek-R1 model's reasoning capabilities
-# Features:
-- Complete reasoning process display
-- Streaming response handling
-- Separate tracking of content and reasoning
-```
-
-### Setup for Testing
-
-1. Set up environment variables:
-```bash
-OPENROUTER_API_URL=https://openrouter.ai/api/v1
-OPENROUTER_API_KEY=your_api_key_here
-```
-
-2. Install additional dependencies:
-```bash
-pip install openai python-dotenv
-```
-
-### Running Tests
-
-Test individual models:
-```bash
-# Test Aion model
-python testthinkingmodels.py
-
-# Test O1 thinking
-python test_deepseek_thinking.py
-
-# Test DeepSeek reasoning
-python deepseektesting.py
-```
-
-### Example Output
-
-```
-=== Testing prompt: What is deixis? ===
-
-<think>Let me break this down step by step:
-1. First, let's understand the etymology...
-2. Now, let's consider the concept...</think>
-
-Deixis refers to words and phrases that...
-```
-
-### Models Tested
-
-- **Aion-1.0**: General reasoning capabilities
-- **O1-Preview**: Structured thinking with color coding
-- **DeepSeek-R1**: Detailed reasoning process
-
-### Notes
-
-- Each test file can be run independently
-- Responses are streamed in real-time
-- Reasoning is displayed distinctly from content
-- All tests use the OpenRouter API for model access 
-
-## Repository Structure
-
-```
-main           # Stable release branch
-├── development    # Development branch
-│   ├── feature/debate-system      # Debate system features
-│   └── feature/thinking-models    # Thinking models testing
-```
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details 
