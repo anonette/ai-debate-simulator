@@ -1,0 +1,54 @@
+venv/
+.venv/
+__pycache__/
+# Environment variables and secrets
+.env
+.env.*
+*.env
+*.pyc
+.DS_Store
+debate_session*
+.streamlit/secrets.toml
+.streamlit/*.toml
+
+# Logs
+logs/
+*.log
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Python virtual environment
+pyvenv.cfg
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# Streamlit
+.streamlit/
+.streamlit/*
+
+# Environment directories
+env/
+ENV/
+.env/
+.venv/
+
+# Byte-compiled files
+*.py[cod]
+*$py.class
+
+# Local development settings
+local_settings.py
+config.local.yaml
