@@ -12,8 +12,10 @@ debate_session*
 .streamlit/*.toml
 
 # Logs
-logs/
-*.log
+logs/*
+!logs/english/
+!logs/basque/
+!logs/README.md
 
 # IDE and Editor files
 .vscode/

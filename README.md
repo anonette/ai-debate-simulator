@@ -215,3 +215,16 @@ logs/
 │   └── YYYYMMDD_HHMMSS/ # Date-organized folders
 └── README.md            # Log documentation
 ```
+
+## Raw Debate Logs
+
+Access the raw debate transcripts from our experiments:
+- [View Raw Debate Logs](https://drive.google.com/drive/folders/1H_4D9rxHQw8cksLxJ8W-mfGF_3fz0bfL?usp=drive_link)
+
+Available files:
+- `debate_basque_20250307_145443.txt`: Basque language debate transcript
+- `debate_english_20250307_150535.txt`: English language debate transcript
+
+## Research Analysis
+
+This project includes a detailed analysis of how language structure influences AI governance debates, comparing discussions in English (nominative-accusative) and Basque (ergative-absolutive) using Gemini-Pro.

@@ -25,7 +25,7 @@ def test_deepseek():
             },
             {
                 "role": "user",
-                "content": "Think of a random number."
+                "content": "What are the economic impacts of universal basic income?"
             }
         ],
         "stream": True,
