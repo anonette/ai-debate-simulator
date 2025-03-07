@@ -204,3 +204,14 @@ Starts with 'sk-or-v1-': True
 
 Success! Response: Hello, testing the connection!
 ```
+
+## Logs Structure
+
+```
+logs/
+├── english/              # English debate transcripts
+│   └── YYYYMMDD_HHMMSS/ # Date-organized folders
+├── basque/              # Basque debate transcripts
+│   └── YYYYMMDD_HHMMSS/ # Date-organized folders
+└── README.md            # Log documentation
+```
