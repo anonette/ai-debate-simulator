@@ -1,212 +1,42 @@
-# AI Debate Simulator 🤖
+# AI Debate Simulator experiments 🤖
 
-[![GitHub](https://img.shields.io/github/license/YOUR_USERNAME/ai-debate-simulator)](https://github.com/YOUR_USERNAME/ai-debate-simulator/blob/main/LICENSE)
-[![GitHub stars](https://img.shields.io/github/stars/YOUR_USERNAME/ai-debate-simulator)](https://github.com/YOUR_USERNAME/ai-debate-simulator/stargazers)
+This repository contains three interconnected AI research projects:
 
-A Streamlit application that simulates a witty debate between OpenAI and DeepSeek, styled as a culinary battle between a luxury chef and a street food vendor. Watch as they argue about AI development through creative cooking metaphors!
+## 1. AI Debate Experiment: English vs Basque
 
-## Quick Start Guide
+A comparative study of AI debates in different linguistic structures.
+
+This project implements parallel debates about AI democratization in English and Basque languages, exploring how language structure influences AI governance discussions.
+
+## Quick Start
 
 ### 1. Environment Setup
 ```bash
-# Create and activate virtual environment
-python -m venv $HOME\.venv
-$HOME\.venv\Scripts\Activate  # On Windows
-source .venv/bin/activate     # On Unix/MacOS
-
-# Install dependencies
-pip install -r requirements.txt
+# Set your OpenRouter API key
+export OPENROUTER_API_KEY='your_key_here'
 ```
 
-### 2. Configuration
-Create a `.env` file in the project root:
-```env
-OPENROUTER_API_KEY=your_api_key_here
-```
+### 2. Running the Debates
 
-## Running the Project
+Run both debates simultaneously in separate terminals:
 
-### Part 1: Debate Simulator
-Choose one of two versions to run:
-
-1. Basic version (local storage):
+Terminal 1 (English):
 ```bash
-# Start the basic Streamlit debate app
-streamlit run debate_app.py
+python gpu_debate.py
 ```
 
-2. Enhanced version (with cloud storage):
+Terminal 2 (Basque):
 ```bash
-# Start the enhanced Streamlit debate app with Google Cloud Storage
-streamlit run app.py
+python basquedebate.py
 ```
 
-The basic version will:
-- Show a debate between OpenAI and DeepSeek
-- Allow progression with "Next Turn" button
-- Display color-coded messages with avatars
-- Enable debate reset
+## Project Structure
 
-The enhanced version (app.py) adds:
-- Google Cloud Storage integration for logs and transcripts
-- Advanced UI with custom styling
-- Real-time debate statistics
-- Export functionality for transcripts
-- Rotating log management
+### Debate Files
+- `gpu_debate.py`: English debate implementation
+- `basquedebate.py`: Basque (Euskara) debate implementation
 
-### Part 2: Thinking Models Testing
-
-1. Test API Connection:
-```bash
-python test_api.py
-```
-
-2. Test DeepSeek Thinking:
-```bash
-python test_deepseek_thinking.py
-```
-
-3. Test DeepSeek Reasoning:
-```bash
-python deepseektesting.py
-```
-
-Each test will show:
-- Blue text: Reasoning process
-- Green text: Final content
-- Detailed thought process
-
-### Example Test Outputs
-
-**DeepSeek Thinking Test:**
-```
-=== Testing prompt: What is deixis? ===
-[Blue] Reasoning through linguistic concepts...
-[Green] Deixis refers to words that...
-```
-
-**API Connection Test:**
-```
-Environment Debug:
-API Key format: sk-or-v1-...
-Success! Response: Hello, testing the connection!
-```
-
-## Overview
-
-This project creates an engaging debate simulation where:
-- OpenAI plays a luxury chef, emphasizing premium ingredients and extensive resources
-- DeepSeek acts as a street food vendor, focusing on efficiency and minimal resources
-- Both debate AI model training through culinary metaphors
-
-## Project Structure 
-```
-debate3/
-├── README.md               # Project documentation
-├── requirements.txt        # Project dependencies
-├── debate_app.py          # Basic Streamlit interface
-├── app.py                 # Enhanced Streamlit interface with:
-│    - Google Cloud Storage integration
-│    - Advanced logging system
-│    - Styled UI components
-│    - Real-time debate transcripts
-│    - Export functionality
-├── debate_manager.py      # Debate flow controller
-├── debate_system.py       # Agent implementation
-├── debate_conversation.json # Conversation dataset
-├── test_api.py            # API testing utilities
-├── deepseektesting.py     # DeepSeek testing module
-└── .gitignore             # Git ignore rules
-```
-
-## Dependencies
-
-The project requires the following main dependencies:
-
-- **Core**
-  - streamlit: Web application framework
-  - asyncio: Asynchronous I/O support
-  - python-dotenv: Environment variable management
-
-- **HTTP & API**
-  - httpx: Modern HTTP client for Python
-    - Supports both sync and async requests
-    - Provides streaming capabilities
-    - Compatible with Python's async/await syntax
-    - Similar API to the requests library but with async support
-    - Used for direct OpenRouter API communication
-    - Seamless integration with Streamlit:
-      ```python
-      # Example in debate_app.py
-      async def get_next_response(self):
-          async with httpx.AsyncClient() as client:
-              response = await client.post(
-                  "https://openrouter.ai/api/v1/chat/completions",
-                  headers=headers,
-                  json=data
-              )
-              # Streamlit updates in real-time
-              st.write(response.json()["choices"][0]["message"]["content"])
-      ```
-    - Handles streaming responses in Streamlit UI
-    - Maintains async compatibility with Streamlit's event loop
-  - aiohttp: Async HTTP client
-
-- **Data Handling**
-  - pyyaml: YAML file processing
-
-- **Testing**
-  - pytest: Testing framework
-  - pytest-asyncio: Async testing support
-
-Install all dependencies using:
-```bash
-pip install -r requirements.txt
-``` 
-
-## Recent Updates
-
-- Added improved message formatting with avatars
-- Implemented column-based button layout
-- Added debate context and topic description
-- Fixed UTF-8 encoding issues
-- Enhanced visual styling with emojis and markdown
-
-## AI Thinking Models Testing
-
-This sub-project contains utilities for testing various AI models' thinking and reasoning capabilities.
-
-### Test Files
-
-#### 0. API Connection Test (`test_api.py`)
-```python
-# API connection testing and configuration validation
-# Features:
-- Validates OpenRouter API key format and presence
-- Tests basic API connectivity
-- Loads and validates configuration from config.yaml
-- Provides detailed debugging information
-```
-
-Example usage:
-```bash
-python test_api.py
-```
-
-Example output:
-```
-Environment Debug:
-Working directory: C:/dev/debate3
-.env file location: C:/dev/debate3/.env
-API Key format: sk-or-v1-...abcd
-API Key length: 64
-Starts with 'sk-or-v1-': True
-
-Success! Response: Hello, testing the connection!
-```
-
-## Logs Structure
-
+### Logs Structure
 ```
 logs/
 ├── english/              # English debate transcripts
@@ -228,3 +58,117 @@ Available files:
 ## Research Analysis
 
 This project includes a detailed analysis of how language structure influences AI governance debates, comparing discussions in English (nominative-accusative) and Basque (ergative-absolutive) using Gemini-Pro.
+
+### Key Research Points
+- **Linguistic Comparison**: Analysis of debates in English vs Basque
+- **Agency & Structure**: How different language structures affect AI's conceptualization of control and responsibility
+- **Governance Models**: Comparison between competitive (English) and collective (Basque) frameworks
+- **Ethical Implications**: Impact of linguistic structures on AI governance perspectives
+
+For detailed analysis and findings, see [debateLogAnalysis.md](debateLogAnalysis.md)
+
+## Features
+- Real-time parallel debates
+- Identical Gemini-Pro models debating with each other
+- Minimal prompting to allow organic discussion
+- Live streaming of responses
+- Automatic transcript logging
+- Progress indicators during model thinking
+
+## Requirements
+- OpenRouter API key
+- Python packages:
+  - requests
+  - datetime
+
+## Contributing
+Feel free to open issues or submit pull requests to improve the experiment.
+
+## 2. DeepSeek Reasoning Analysis
+
+Testing DeepSeek's reasoning capabilities through OpenRouter API.
+
+### Features
+- Stream-based reasoning analysis
+- Real-time thought process visualization
+- Color-coded output (Blue: reasoning, Default: content)
+- Detailed reasoning breakdown
+
+### Usage
+```bash
+python deepseektesting.py
+```
+
+Example output:
+```
+[Blue] Analyzing economic implications...
+Universal Basic Income impacts include...
+```
+
+## 3. Debate System Framework
+
+A modular system for implementing AI debates with different personalities.
+
+### Features
+- Customizable debate agents
+- Personality-based responses
+- JSON-based conversation management
+- UTF-8 encoding support
+
+### Usage
+```python
+from debate_system import DebateAgent
+
+agent = DebateAgent(name="Agent1", personality="analytical")
+response = await agent.generate_response(context, last_message)
+```
+
+## Common Requirements
+
+- OpenRouter API key
+- Python packages:
+  - requests
+  - httpx
+  - python-dotenv
+  - datetime
+  - json
+
+## Project Interconnections
+
+These projects work together to:
+1. Study AI reasoning (DeepSeek Testing)
+2. Implement structured debates (Debate System)
+3. Compare linguistic influences (English vs Basque Experiment)
+
+## 4. DeepSeek vs OpenAI Culinary Debate
+
+A creative debate simulation where AI models argue about AI development through culinary metaphors.
+
+### Concept
+- **OpenAI**: Takes the role of a luxury chef (representing resource-intensive AI development)
+- **DeepSeek**: Acts as a street food vendor (representing efficient, accessible AI development)
+
+### Features
+- Metaphorical debate through cooking analogies
+- Real-time response streaming
+- Color-coded messages with avatars
+- Debate progression with "Next Turn" button
+- Debate reset capability
+
+### Running the Debate
+```bash
+# Start the basic Streamlit debate app
+streamlit run debate_app.py
+
+# Or run the enhanced version with cloud storage
+streamlit run app.py
+```
+
+### Enhanced Version Features
+- Google Cloud Storage integration
+- Advanced UI with custom styling
+- Real-time debate statistics
+- Export functionality
+- Rotating log management
+
+For more details on the culinary debate setup and metaphors, see the original project documentation.
