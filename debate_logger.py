@@ -17,23 +17,29 @@ class DebateLogger:
         self.logger = logging.getLogger("DebateLogger")
         self.logger.setLevel(logging.INFO)
         
+        # Clear existing handlers to avoid duplicates
+        if self.logger.hasHandlers():
+            self.logger.handlers.clear()
+        
         # File handler with timestamp
         file_handler = logging.FileHandler(log_file, encoding='utf-8')
         file_handler.setLevel(logging.INFO)
         
-        # Console handler
+        # Console handler with less verbose output
         console_handler = logging.StreamHandler()
-        console_handler.setLevel(logging.INFO)
+        console_handler.setLevel(logging.WARNING)  # Only show warnings and errors on console
         
-        # Create formatter
-        formatter = logging.Formatter(
+        # Create formatters
+        file_formatter = logging.Formatter(
             '%(asctime)s - %(levelname)s - %(message)s',
             datefmt='%Y-%m-%d %H:%M:%S'
         )
         
-        # Add formatter to handlers
-        file_handler.setFormatter(formatter)
-        console_handler.setFormatter(formatter)
+        console_formatter = logging.Formatter('%(levelname)s: %(message)s')
+        
+        # Add formatters to handlers
+        file_handler.setFormatter(file_formatter)
+        console_handler.setFormatter(console_formatter)
         
         # Add handlers to logger
         self.logger.addHandler(file_handler)

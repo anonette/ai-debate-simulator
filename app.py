@@ -10,60 +10,95 @@ from debate_system import DebateAgent
 from debate_manager import DebateManager
 import json
 from logging.handlers import RotatingFileHandler
-from google.cloud import storage
 from io import StringIO
+import sys
+
+# Try to import Google Cloud Storage, but don't fail if not available
+try:
+    from google.cloud import storage
+    HAVE_GCS = True
+except ImportError:
+    HAVE_GCS = False
 
 # Initialize Google Cloud Storage
 def init_storage():
     try:
-        # Check if we're running locally
+        # Check if we're running locally (preferred mode)
         if os.path.exists('.env'):
             logger.info("Running locally, using file system storage")
             return None
             
-        # Get credentials from Streamlit secrets
-        creds = {
-            "type": st.secrets.get("GCS_CREDENTIALS_TYPE"),
-            "project_id": st.secrets.get("GCS_PROJECT_ID"),
-            "private_key_id": st.secrets.get("GCS_PRIVATE_KEY_ID"),
-            "private_key": st.secrets.get("GCS_PRIVATE_KEY"),
-            "client_email": st.secrets.get("GCS_CLIENT_EMAIL"),
-            "client_id": st.secrets.get("GCS_CLIENT_ID"),
-            "auth_uri": st.secrets.get("GCS_AUTH_URI"),
-            "token_uri": st.secrets.get("GCS_TOKEN_URI"),
-            "auth_provider_x509_cert_url": st.secrets.get("GCS_AUTH_PROVIDER_CERT_URL"),
-            "client_x509_cert_url": st.secrets.get("GCS_CLIENT_CERT_URL")
-        }
-        
-        # Save credentials to temporary file
-        with open('temp_credentials.json', 'w') as f:
-            json.dump(creds, f)
-        os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'temp_credentials.json'
-        
-        storage_client = storage.Client()
-        bucket_name = st.secrets.get("GCS_BUCKET_NAME", "ai-dinner-battle-logs")
-        bucket = storage_client.bucket(bucket_name)
-        if not bucket.exists():
-            bucket = storage_client.create_bucket(bucket_name)
-        return bucket
+        # Only run this if in cloud environment
+        try:
+            # Check if Google Cloud Storage is available
+            if not HAVE_GCS:
+                logger.info("Google Cloud Storage not available, using local storage")
+                return None
+                
+            # Get credentials from Streamlit secrets
+            creds = {
+                "type": st.secrets.get("GCS_CREDENTIALS_TYPE"),
+                "project_id": st.secrets.get("GCS_PROJECT_ID"),
+                "private_key_id": st.secrets.get("GCS_PRIVATE_KEY_ID"),
+                "private_key": st.secrets.get("GCS_PRIVATE_KEY"),
+                "client_email": st.secrets.get("GCS_CLIENT_EMAIL"),
+                "client_id": st.secrets.get("GCS_CLIENT_ID"),
+                "auth_uri": st.secrets.get("GCS_AUTH_URI"),
+                "token_uri": st.secrets.get("GCS_TOKEN_URI"),
+                "auth_provider_x509_cert_url": st.secrets.get("GCS_AUTH_PROVIDER_CERT_URL"),
+                "client_x509_cert_url": st.secrets.get("GCS_CLIENT_CERT_URL")
+            }
+            
+            # Save credentials to temporary file
+            with open('temp_credentials.json', 'w') as f:
+                json.dump(creds, f)
+            os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'temp_credentials.json'
+            
+            storage_client = storage.Client()
+            bucket_name = st.secrets.get("GCS_BUCKET_NAME", "ai-dinner-battle-logs")
+            bucket = storage_client.bucket(bucket_name)
+            if not bucket.exists():
+                bucket = storage_client.create_bucket(bucket_name)
+            return bucket
+        except ImportError:
+            logger.info("Google Cloud Storage not available, using local storage")
+            return None
     except Exception as e:
-        logger.error(f"Failed to initialize Google Cloud Storage: {str(e)}")
+        logger.error(f"Failed to initialize storage: {str(e)}")
         return None
 
-# Configure logging to use Google Cloud Storage
+# Configure logging to use Google Cloud Storage or local storage
 class GCSHandler(logging.Handler):
     def __init__(self, bucket, log_file_name):
         super().__init__()
         self.bucket = bucket
         self.log_file_name = log_file_name
         self.buffer = StringIO()
+        
+        # Create a local log file backup
+        self.local_file = open(log_file_name, 'a', encoding='utf-8')
 
     def emit(self, record):
         msg = self.format(record)
-        self.buffer.write(msg + '\\n')
-        # Upload to GCS
-        blob = self.bucket.blob(f"logs/{self.log_file_name}")
-        blob.upload_from_string(self.buffer.getvalue())
+        
+        # Always write to local file
+        self.local_file.write(msg + '\n')
+        self.local_file.flush()
+        
+        # If we have a GCS bucket, upload there too
+        if self.bucket:
+            self.buffer.write(msg + '\n')
+            # Upload to GCS
+            try:
+                blob = self.bucket.blob(f"logs/{self.log_file_name}")
+                blob.upload_from_string(self.buffer.getvalue())
+            except Exception as e:
+                # Just log to stderr if GCS upload fails
+                sys.stderr.write(f"GCS upload failed: {str(e)}\n")
+                
+    def close(self):
+        self.local_file.close()
+        super().close()
 
 def setup_logging():
     # Get current handlers and remove them
@@ -111,16 +146,16 @@ st.set_page_config(page_title="AI Dinner Battle", layout="wide")
 # Define agent avatars and colors
 AGENT_STYLES = {
     "OpenAI": {
-        "avatar": "👨‍🍳",  # Professional chef
-        "color": "#10a37f",  # OpenAI green
-        "full_name": "OpenAI",  # Shortened name
-        "title": "Fine Dining Chef"  # Separate title
+        "avatar": "🤖",
+        "full_name": "OpenAI",
+        "color": "#00A67E",
+        "title": "Luxury Chef"
     },
     "DeepSeek": {
-        "avatar": "🎭",  # Theater mask for drama and rebellion
-        "color": "#ff6b6b",  # Warm red
-        "full_name": "DeepSeek",  # Shortened name
-        "title": "Street Food Chef"  # Separate title
+        "avatar": "🤖",
+        "full_name": "DeepSeek",
+        "color": "#1E88E5",
+        "title": "Street Food Vendor"
     }
 }
 
@@ -649,7 +684,7 @@ def main():
         log_debate_message(st.session_state.debate_log_file, current_agent.name, "", True)
         
         # Show thinking indicator with colored avatar
-        with st.spinner(f"{AGENT_STYLES[current_agent.name]['avatar']} {AGENT_STYLES[current_agent.name]['full_name']} is thinking..."):
+        with st.spinner(f"Agent {current_agent.name} is thinking..."):
             last_message = (st.session_state.conversation[-1]["message"] 
                           if st.session_state.conversation 
                           else "Start the debate by introducing yourself and your approach to AI development.")

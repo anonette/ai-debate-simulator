@@ -1,5 +1,5 @@
 from typing import List, Dict
-from debate_system import DebateAgent
+from debate_system_fixed import DebateAgent  # Updated to use the fixed version
 import asyncio
 from datetime import datetime
 

@@ -1,174 +1,119 @@
-# AI Debate Simulator experiments 🤖
+# KitchenDebate
 
-This repository contains three interconnected AI research projects:
+A creative AI debate simulator that pits different large language models against each other in a culinary-themed debate format.
 
-## 1. AI Debate Experiment: English vs Basque
+## Core Concept
 
-A comparative study of AI debates in different linguistic structures.
+KitchenDebate simulates debates between AI models (like OpenAI's GPT-4 and DeepSeek's models) where they take on personas related to cooking and food preparation as metaphors for their AI development approaches. For example, OpenAI is portrayed as a "luxury chef" while DeepSeek is portrayed as a "street food vendor" - reflecting different philosophies in AI development (resource-intensive vs. efficient).
 
-This project implements parallel debates about AI democratization in English and Basque languages, exploring how language structure influences AI governance discussions.
+## Key Components
 
-## Quick Start
+1. **Debate System (`debate_system.py`)**
+   - Defines the `DebateAgent` class that represents each AI participant
+   - Handles API connections to language models via OpenRouter
+   - Each agent has a name (e.g., "OpenAI") and personality (e.g., "luxury chef")
 
-### 1. Environment Setup
-```bash
-# Set your OpenRouter API key
-export OPENROUTER_API_KEY='your_key_here'
+2. **Debate Manager (`debate_manager.py`)**
+   - Orchestrates the debate between two AI agents
+   - Tracks conversation history and manages turns
+   - Builds context for each message to maintain coherent conversation
+
+3. **Debate Logger (`debate_logger.py`)**
+   - Records all debate events and messages for future reference
+   - Creates timestamped log files
+   - Handles both file and console output
+
+4. **Configuration (`config.yaml`)**
+   - Contains settings for agents, models, debate topics, and styles
+   - Defines debate prompts and personalities
+   - Allows for different debate "styles" (Casual Dinner, Kitchen Battle, Fine Dining)
+
+5. **Web Interface (`debate_app.py` and `app.py`)**
+   - Uses Streamlit to create a web-based UI for the debates
+   - Displays conversation history with appropriate formatting
+   - Provides controls for advancing the debate or resetting it
+
+6. **API Testing (`test_api.py`)**
+   - Tests connections to OpenRouter API for language model access
+   - Verifies API keys and configuration
+
+## How It Works
+
+1. The system initializes two debate agents, each representing a different AI model
+2. Each agent is assigned a persona (e.g., luxury chef vs. street food vendor)
+3. A debate topic is selected (e.g., "AI Model Training: Efficiency vs Resources")
+4. The debate manager alternates between agents, generating responses through the language models
+5. Each response is logged and displayed in the Streamlit interface
+6. Users can advance the debate by clicking "Next Turn" or reset it with "Reset Debate"
+
+## Debate Themes
+
+The debates use culinary metaphors to represent different AI development approaches:
+- Premium ingredients vs. efficient cooking (high resource usage vs. efficiency)
+- Luxury dining vs. street food (different approaches to AI design)
+- Complex preparation vs. simple techniques (model complexity vs. simplicity)
+
+Available topics include:
+- AI Dinner Battle: A feast where AI companies compete through food metaphors
+- AI Olympics: Sports metaphors for AI competition
+- AI Space Race: Space exploration metaphors for AI development
+
+## Running the Project
+
+### Prerequisites
+- Python 3.8+
+- OpenRouter API key (stored in a `.env` file)
+
+### Installation
+
+1. Clone the repository:
+   ```
+   git clone https://github.com/your-username/KitchenDebate.git
+   cd KitchenDebate
+   ```
+
+2. Install dependencies:
+   ```
+   pip install -r requirements.txt
+   ```
+
+3. Create a `.env` file with your OpenRouter API key:
+   ```
+   OPENROUTER_API_KEY=your_api_key_here
+   ```
+
+### Running the Application
+
+Option 1: Using the runner script (recommended):
+```
+python run_debate.py
 ```
 
-### 2. Running the Debates
-
-Run both debates simultaneously in separate terminals:
-
-Terminal 1 (English):
-```bash
-python gpu_debate.py
+Option 2: Direct execution of Streamlit app:
 ```
-
-Terminal 2 (Basque):
-```bash
-python basquedebate.py
-```
-
-## Project Structure
-
-### Debate Files
-- `gpu_debate.py`: English debate implementation
-- `basquedebate.py`: Basque (Euskara) debate implementation
-
-### Logs Structure
-```
-logs/
-├── english/              # English debate transcripts
-│   └── YYYYMMDD_HHMMSS/ # Date-organized folders
-├── basque/              # Basque debate transcripts
-│   └── YYYYMMDD_HHMMSS/ # Date-organized folders
-└── README.md            # Log documentation
-```
-
-## Raw Debate Logs
-
-Access the raw debate transcripts from our experiments:
-- [View Raw Debate Logs](https://drive.google.com/drive/folders/1H_4D9rxHQw8cksLxJ8W-mfGF_3fz0bfL?usp=drive_link)
-
-Available files:
-- `debate_basque_20250307_145443.txt`: Basque language debate transcript
-- `debate_english_20250307_150535.txt`: English language debate transcript
-
-## Research Analysis
-
-This project includes a detailed analysis of how language structure influences AI governance debates, comparing discussions in English (nominative-accusative) and Basque (ergative-absolutive) using Gemini-Pro.
-
-### Key Research Points
-- **Linguistic Comparison**: Analysis of debates in English vs Basque
-- **Agency & Structure**: How different language structures affect AI's conceptualization of control and responsibility
-- **Governance Models**: Comparison between competitive (English) and collective (Basque) frameworks
-- **Ethical Implications**: Impact of linguistic structures on AI governance perspectives
-
-For detailed analysis and findings, see [debateLogAnalysis.md](debateLogAnalysis.md)
-
-## Features
-- Real-time parallel debates
-- Identical Gemini-Pro models debating with each other
-- Minimal prompting to allow organic discussion
-- Live streaming of responses
-- Automatic transcript logging
-- Progress indicators during model thinking
-
-## Requirements
-- OpenRouter API key
-- Python packages:
-  - requests
-  - datetime
-
-## Contributing
-Feel free to open issues or submit pull requests to improve the experiment.
-
-## 2. DeepSeek Reasoning Analysis
-
-Testing DeepSeek's reasoning capabilities through OpenRouter API.
-
-### Features
-- Stream-based reasoning analysis
-- Real-time thought process visualization
-- Color-coded output (Blue: reasoning, Default: content)
-- Detailed reasoning breakdown
-
-### Usage
-```bash
-python deepseektesting.py
-```
-
-Example output:
-```
-[Blue] Analyzing economic implications...
-Universal Basic Income impacts include...
-```
-
-## 3. Debate System Framework
-
-A modular system for implementing AI debates with different personalities.
-
-### Features
-- Customizable debate agents
-- Personality-based responses
-- JSON-based conversation management
-- UTF-8 encoding support
-
-### Usage
-```python
-from debate_system import DebateAgent
-
-agent = DebateAgent(name="Agent1", personality="analytical")
-response = await agent.generate_response(context, last_message)
-```
-
-## Common Requirements
-
-- OpenRouter API key
-- Python packages:
-  - requests
-  - httpx
-  - python-dotenv
-  - datetime
-  - json
-
-## Project Interconnections
-
-These projects work together to:
-1. Study AI reasoning (DeepSeek Testing)
-2. Implement structured debates (Debate System)
-3. Compare linguistic influences (English vs Basque Experiment)
-
-## 4. DeepSeek vs OpenAI Culinary Debate
-
-A creative debate simulation where AI models argue about AI development through culinary metaphors.
-
-### Concept
-- **OpenAI**: Takes the role of a luxury chef (representing resource-intensive AI development)
-- **DeepSeek**: Acts as a street food vendor (representing efficient, accessible AI development)
-
-### Features
-- Metaphorical debate through cooking analogies
-- Real-time response streaming
-- Color-coded messages with avatars
-- Debate progression with "Next Turn" button
-- Debate reset capability
-
-### Running the Debate
-```bash
-# Start the basic Streamlit debate app
 streamlit run debate_app.py
-
-# Or run the enhanced version with cloud storage
-streamlit run app.py
 ```
 
-### Enhanced Version Features
-- Google Cloud Storage integration
-- Advanced UI with custom styling
-- Real-time debate statistics
-- Export functionality
-- Rotating log management
+## Sample Debate Output
 
-For more details on the culinary debate setup and metaphors, see the original project documentation.
+The debates can get quite entertaining, with AI models exchanging witty culinary-themed barbs:
+
+**OpenAI (Luxury Chef):**
+> *delicately places a sliver of truffle atop a meticulously prepared dish, a monitor displaying real-time API usage in the background*
+> 
+> "We consider each API request not just a transaction, but a morsanet, if you will—each byte distilled from our $13B worth of premium GPUs, like extracting the rarest essence of white truffle. It's not just service; it's an art form, darling."
+
+**DeepSeek (Street Food Vendor):**
+> *slides bowl aside and checks training efficiency on phone*
+> 
+> "We scraped that benchmark with a fraction of the parameters - proof you don't need a 10,000 GPU kitchen to cook up SOTA results. It's all about technique and knowing your ingredients, not throwing money at the pot."
+
+## License
+
+This project is licensed under the terms included in the LICENSE file.
+
+## Acknowledgments
+
+- OpenAI and DeepSeek for their AI models
+- OpenRouter for API access to multiple AI models
+- Streamlit for the web interface framework
