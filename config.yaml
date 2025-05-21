@@ -80,3 +80,13 @@ debate_styles:
   philosophical:
     name: "Fine Dining"
     prompt_suffix: "Include subtle jabs about AI ethics and development." 
+
+# Debate Configuration
+topic: "AI Model Training - Efficiency vs Resources"
+models:
+  openai:
+    name: "OpenAI"
+    model: "gpt-4"
+  deepseek:
+    name: "DeepSeek"
+    model: "deepseek/deepseek-chat" 

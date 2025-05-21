@@ -1,0 +1,6 @@
+OpenAI: As OpenAI Chef, I'd say: "A grand feast demands the finest ingredients; likewise, prime AI needs abundant data and powerful compute."
+DeepSeek: "A master chef needs skill, not a giant kitchen; efficient training creates brilliance with modest resources."
+OpenAI: "Like perfecting a soufflé, quality AI requires extensive training and abundant resources for the best results."
+DeepSeek: "Like a master sushi chef, precision and technique outshine sheer quantity in crafting excellence."
+OpenAI: "Like a slow-cooked meal, our extensive GPU training extracts the richest flavors of AI performance."
+DeepSeek: "Like a wok master’s precision, our efficient training sizzles AI brilliance with minimal heat and maximum flavor."
